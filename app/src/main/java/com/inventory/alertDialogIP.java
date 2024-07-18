@@ -38,17 +38,17 @@ public class alertDialogIP extends DialogFragment {
 
 
         builder.setView(view)
-                .setTitle("Enter IP Address")
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setTitle("Insérez l'@IP ")
+                .setPositiveButton("Enregistrer", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         NetworkConfig.BASE_URL = ipAddressEditText.getText().toString();
                         dof.addIP(NetworkConfig.BASE_URL);
                         // Handle saving the IP address here
-                        Toast.makeText(getActivity(), "IP Address saved: " + NetworkConfig.BASE_URL, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "@IP enregistrée: " + NetworkConfig.BASE_URL, Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
