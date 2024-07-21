@@ -69,22 +69,6 @@ public class BddLines {
     public void addLines(@Nullable String date, @Nullable String CB) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Vérifier si le code-barres existe déjà
-        String query = "SELECT COUNT(*) FROM " + TABLE_LINES + " WHERE " + LINES_CODEBARRE + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[] { CB });
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int count = cursor.getInt(0);
-            cursor.close();
-
-            if (count > 0) {
-                // Le code-barres existe déjà
-                Toast.makeText(context, "Le code-barres existe déjà", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
         // Insérer le nouveau code-barres
         ContentValues cv = new ContentValues();
         cv.put(LINES_CODEBARRE, CB);

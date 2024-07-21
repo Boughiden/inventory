@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
@@ -40,6 +41,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
     ImageButton add, scan;
     View tb;
     TextView  dateold;
+
+    private List<String> barcodeList;
+    private Runnable runnable;
+
+    private Handler handler;
 
 
 
@@ -122,15 +129,63 @@ public class MainActivity extends AppCompatActivity {
             cb = findViewById(R.id.editCB);
             add = findViewById(R.id.addcb);
 
+            Handler handler = new Handler();
+
+            cb.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    // Pas besoin d'implémenter cette méthode
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    // Pas besoin d'implémenter cette méthode
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (runnable != null) {
+                        handler.removeCallbacks(runnable);
+                    }
+
+                    runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            String text = editable.toString();
+                            if (!text.isEmpty()) {
+                                if (text.contains("\n")) { // Détecter plusieurs codes-barres
+                                    String[] barcodes = text.split("\n");
+                                    for (String barcode : barcodes) {
+                                        if (!barcode.trim().isEmpty()) {
+                                            barcodeList.add(barcode.trim());
+                                        }
+                                    }
+                                    cb.setText("");  // Réinitialiser le champ après l'ajout
+                                    // Ajouter les codes-barres à la base de données
+                                    addBarcodesToDatabase();
+                                } else { // Un seul code-barres
+                                    bdlines.addLines(dateinv, text);
+                                    cb.setText("");  // Réinitialiser le champ après l'ajout
+                                }
+                            }
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
+                }
+            });
 
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (cb.getText() != null){
+                    if (cb.getText() != null && !cb.getText().toString().isEmpty()) {
                         bdlines.addLines(dateinv, String.valueOf(cb.getText()));
+                        cb.setText("");  // Réinitialiser le champ après l'ajout
                     }
                 }
             });
+
+
 
             end = findViewById(R.id.end);
             end.setOnClickListener(new View.OnClickListener() {
@@ -356,5 +411,17 @@ public class MainActivity extends AppCompatActivity {
             scanCode();
         }
     });
+
+
+    // l'ajout a la bdd
+
+    private void addBarcodesToDatabase() {
+        if (!barcodeList.isEmpty()) {
+            for (String barcode : barcodeList) {
+                bdlines.addLines(dateinv, barcode);
+            }
+            barcodeList.clear();  // Vider la liste après l'ajout à la base de données
+        }
+    }
 
 }

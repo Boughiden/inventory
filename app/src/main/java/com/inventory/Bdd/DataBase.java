@@ -22,7 +22,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     // declaration de la BDD inventory
     private static final String DATABASE_NAME = "inventory";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // declaration  de la table DOF
     static final String TABLE_DOF="dof";
@@ -60,7 +60,7 @@ public class DataBase extends SQLiteOpenHelper {
         String QueryLines = "CREATE TABLE "+ TABLE_LINES+
                 "(" +
                 LINES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                LINES_CODEBARRE + " text UNIQUE, " +
+                LINES_CODEBARRE + " text , " +
                 LINES_DOF + " date, " +
                 LINES_SYNC + " INTEGER default 0, " +
                 "FOREIGN KEY ("+LINES_DOF+") REFERENCES " + TABLE_DOF + "(" + DOF_DATE + ") " +

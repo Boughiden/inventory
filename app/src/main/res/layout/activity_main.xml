@@ -85,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:ems="10"
+                android:hint="Code barre"
                 android:inputType="text"
-                android:text="Code Barre"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/S" />
 
@@ -95,7 +95,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editCB"
                 app:layout_constraintTop_toBottomOf="@+id/S"
                 app:srcCompat="@android:drawable/ic_input_add" />
 
@@ -167,7 +166,7 @@
                 android:id="@+id/constr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3"
                 tools:layout_editor_absoluteX="16dp">
 
